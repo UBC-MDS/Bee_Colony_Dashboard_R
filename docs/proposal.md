@@ -51,7 +51,7 @@ series plot. Our final visualization will be the percentage of colonies,
 
 ## Research questions and usage scenarios
 
-Our project, the `Bee Colony Dashboard` helps identify the rate and
+Our project, the `Bee Colony Dashboard_R` helps identify the rate and
 possible causes of colony collapse disorder over quarterly periods in
 the US. Some key questions that can be answered are:
 
