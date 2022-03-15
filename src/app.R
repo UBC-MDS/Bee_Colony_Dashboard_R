@@ -81,7 +81,7 @@ app$layout(
                         ),
                         dbcRow(
                             dccDropdown(
-                                id='sstate-widget',
+                                id='state-widget',
                                 value='Alabama',
                                 options = unique(colony$state),
                                 className = 'text-dark',
@@ -106,7 +106,13 @@ app$layout(
                                 dbcCol(
                                     dccDropdown(
                                         id='start-date-widget',
-                                        options = unique(colony$period),
+                                        options = colony$period %>%
+                                                    unique() %>%
+                                                    purrr::map(function(p)
+                                                        list(
+                                                        label = stringr::str_replace(as.character(p), stringr::fixed("."), "Q"),
+                                                        value = p
+                                                        )),
                                         className = 'text-dark', 
                                         style=list(
                                             "height"= "50px",
@@ -123,7 +129,13 @@ app$layout(
                                 dbcCol(
                                     dccDropdown(
                                         id='end-date-widget',
-                                        options = unique(colony$period),
+                                        options = colony$period %>%
+                                                    unique() %>%
+                                                    purrr::map(function(p)
+                                                        list(
+                                                        label = stringr::str_replace(as.character(p), stringr::fixed("."), "Q"),
+                                                        value = p
+                                                        )),
                                         className = 'text-dark',
                                         style=list(
                                             "height"= "50px",
@@ -196,7 +208,7 @@ app$layout(
                                 dbcCardBody(
                                     dccGraph(
                                         id="ncolony_chart",
-                                        style=list("width"= "100%", "height"= "320px")
+                                        style=list("width"= "100%", "height"= "300px")
                                     )
                                 )
                             ), 
@@ -309,8 +321,9 @@ app$callback(
       ggplot2::scale_x_date(date_labels = "%b %Y")
     
     time_series
+    # , width = 700, height = 400
     
-    ggplotly(time_series + aes(text = colony_n), tooltip = "text", width = 700, height = 400) %>%
+    ggplotly(time_series + aes(text = colony_n), tooltip = "text") %>%
       layout(plot_bgcolor = '#fffadc')
   
   }
