@@ -274,6 +274,8 @@ app$callback(
        input('start-date-widget', 'value'),
        input('end-date-widget', 'value')),
   function(state, start_date, end_date) {
+    start_date <- lubridate::ym(start_date)
+    end_date <- lubridate::ym(end_date)
     p <- stressor %>%  filter(state == {{state}} & (period >= {{start_date}} & period <= {{end_date}})) %>%
       ggplot(aes(x = period,
                  y = stress_pct,
