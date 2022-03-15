@@ -34,12 +34,24 @@ app$layout(
       ),
       dccDropdown(
         id = "start-date-widget",
-        options = unique(colony$period),
+        options = colony$period %>%
+          unique() %>%
+          purrr::map(function(p)
+            list(
+              label = stringr::str_replace(as.character(p), stringr::fixed("."), "Q"),
+              value = p
+            )),
         value = 2015.1
       ),
       dccDropdown(
         id = "end-date-widget",
-        options = unique(colony$period),
+        options = colony$period %>%
+          unique() %>%
+          purrr::map(function(p)
+            list(
+              label = stringr::str_replace(as.character(p), stringr::fixed("."), "Q"),
+              value = p
+            )),
         value = 2015.4
       )
     )
