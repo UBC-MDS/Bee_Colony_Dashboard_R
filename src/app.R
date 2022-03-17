@@ -53,15 +53,20 @@ app$layout(
                             )
                         ),
                         htmlH4(
-                            "Select the period for map... (not in use for now)",
+                            "Select the period for map...",
                             style=list("font-family"= "Roboto", "font-weight"= "600")
                         ),
                         dbcRow(
                             dccDropdown(
-                                id='select_state_2',
-                                value='Alabama',
-                                options = state,
-                                className = 'text-dark',
+                                id='map_widget',
+                                options = colony$period %>%
+                                            unique() %>%
+                                            purrr::map(function(p)
+                                                list(
+                                                label = stringr::str_replace(as.character(p), stringr::fixed("."), "Q"),
+                                                value = p
+                                                )),
+                                value = 2015.1,
                                 style=list(
                                     "height"= "50px",
                                     "vertical-align"= "middle",
@@ -162,7 +167,7 @@ app$layout(
                             dbcCardHeader(
                                 
                                     htmlH4(
-                                        "Bee colony loss percentages by state (not in use for now)", 
+                                        "Bee colony loss percentages by state", 
                                         style=list(
                                             "font-family"= "Roboto",
                                             "font-weight"= "600"
@@ -171,8 +176,8 @@ app$layout(
                                 
                             ),
                             dbcCardBody(
-                                htmlIframe(
-                                    id="plot-area-3",
+                                dccGraph(
+                                    id="map",
                                     style=list("width"= "100%", "height"= "320px")
                                 )
                             )
@@ -282,15 +287,15 @@ app$callback(
                                    lubridate::ym(period) %within% lubridate::interval(start = start_date,
                                                                                       end = end_date))
       
-      plot_stressor <- data %>% ggplot(aes(x = stringr::str_replace(as.character(period), stringr::fixed("."), "Q"),
+      plot_stressor <- data %>% ggplot2::ggplot(aes(x = stringr::str_replace(as.character(period), stringr::fixed("."), "Q"),
                             y = stress_pct,
                             fill = stressor)) +
-          geom_bar(position="stack", stat="identity") + 
-          theme(axis.text.x = element_text(angle = 45),
+          ggplot2::geom_bar(position="stack", stat="identity") + 
+          ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45),
                 plot.background = ggplot2::element_rect(fill = '#fffadc'),
                 legend.key = ggplot2::element_rect(fill = '#fffadc'),
                 legend.background = ggplot2::element_rect(fill = '#fffadc')) +
-          labs(title = 'Bee colony stressors', x = 'Time period', y = 'Impacted colonies(%)')
+          ggplot2::labs(title = 'Bee colony stressors', x = 'Time period', y = 'Impacted colonies(%)')
    
         
       ggplotly(plot_stressor, tooltip = c("y", "fill")) %>%
@@ -343,20 +348,32 @@ app$callback(
 )
 
 app$callback(
-  output('plot-area-3', 'figure'),
-  list(input("state-widget", "value"),
-    input("start-date-widget", "value"),
-    input("end-date-widget", "value")),
-  function(state, start_date, end_date) {
-    p <- stressor %>%  filter(state == {{state}} & (period >= {{start_date}} & period <= {{end_date}})) %>%
-      ggplot(aes(x = period,
-                 y = stress_pct,
-                 fill = stressor,
-                 text = stress_pct)) +
-      geom_bar(position="stack", stat="identity") + 
-      labs(title = 'Bee colony stressors', x = 'Time period', y = 'Impacted colonies(%)')
-  ggplotly(p)
+  output('map', 'figure'),
+  list(input('map_widget', 'value')),
+  function(str_period, month) {
+    df <- colony %>%
+      filter(period == str_period)
+    target_df <- left_join(state_info, df, by='state')
+    target_df['colony_lost_pct'][is.na(target_df['colony_lost_pct'])] <- 0
+    
+    g <- list(
+      scope = 'usa',
+      projection = list(type = 'albers usa'),
+      lakecolor = toRGB('white')
+    )
+
+    plot_ly(target_df) %>%
+      layout(geo = g) %>%
+      add_trace(type = "choropleth", locationmode = 'USA-states',
+                locations = ~abbr,
+                z = ~colony_lost_pct,
+                color = ~colony_lost_pct, autocolorscale = TRUE) %>%
+      add_trace(type = "scattergeo", locationmode = 'USA-states',
+                locations = ~abbr, text = ~colony_lost_pct,
+                mode = "text",
+                textfont = list(color = rgb(0,0,0), size = 12))
   }
 )
+
 # app$run_server(debug = T)
 app$run_server(host = '0.0.0.0')
