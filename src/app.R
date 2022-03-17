@@ -25,12 +25,11 @@ colony <- colony %>%
   dplyr::select(state, colony_n, time, period) %>%
   dplyr::distinct(state, period, .keep_all = TRUE)
 
-stressor['start_month'] <- str_split_fixed(stressor$months, '-', 2)[,1]
-stressor['year'] <- as.character(stressor$year)
-stressor['start_month'] <- as.integer(factor(stressor$start_month, levels = month.name))
-stressor["time"] <- paste0(stressor$year,"-",stressor$start_month,"-","01")
-stressor <- stressor %>% select(-c(year, months, start_month))
-stressor["period"] = paste0(year(stressor$time), "-", quarter(stressor$time)) 
+stressor <- stressor %>%
+  tidyr::separate(months, into = c("start_month","start_month2"), sep = "-") %>%
+  dplyr::mutate(time = lubridate::ym(paste(year, start_month)),
+         period = lubridate::quarter(time, type = "year.quarter")) %>% 
+  dplyr::select(state, stressor,stress_pct, time, period)
 
 
 app <- Dash$new(external_stylesheets = dbcThemes$BOOTSTRAP)
@@ -241,7 +240,7 @@ app$layout(
                                 dbcCardBody(
                                     list(
                                         dccGraph(
-                                            id="plot-area",
+                                            id="stressor_chart",
                                             style=list("width"= "100%", "height"= "270px")
                                         ),
                                         htmlH6(
@@ -263,28 +262,40 @@ app$layout(
                 )
             )
         )
-    )
-    # style={"background-color"= "#FFF8DC"}
+    ),
+    style=list("background-color"= "#FFF8DC")
   )
 )
 
 app$callback(
-  output('plot-area', 'figure'),
-  list(input('state-widget', 'value'),
-       input('start-date-widget', 'value'),
-       input('end-date-widget', 'value')),
-  function(state, start_date, end_date) {
-    start_date <- lubridate::ym(start_date)
-    end_date <- lubridate::ym(end_date)
-    p <- stressor %>%  filter(state == {{state}} & (period >= {{start_date}} & period <= {{end_date}})) %>%
-      ggplot(aes(x = period,
-                 y = stress_pct,
-                 fill = stressor,
-                 text = stress_pct)) +
-      geom_bar(position="stack", stat="identity") + 
-      labs(title = 'Bee colony stressors', x = 'Time period', y = 'Impacted colonies(%)')
-  ggplotly(p)
-  }
+    output('stressor_chart', 'figure'),
+    list(
+      input('state-widget', 'value'),
+      input('start-date-widget', 'value'),
+      input('end-date-widget', 'value') 
+      ),
+    plot_stressor_chart <- function(state_arg, start_date, end_date) {
+      start_date <- lubridate::ym(start_date)
+      end_date <- lubridate::ym(end_date)
+      
+      data <- stressor %>%  filter(state == state_arg, 
+                                   lubridate::ym(period) %within% lubridate::interval(start = start_date,
+                                                                                      end = end_date))
+      
+      plot_stressor <- data %>% ggplot(aes(x = stringr::str_replace(as.character(period), stringr::fixed("."), "Q"),
+                            y = stress_pct,
+                            fill = stressor)) +
+          geom_bar(position="stack", stat="identity") + 
+          theme(axis.text.x = element_text(angle = 45),
+                plot.background = ggplot2::element_rect(fill = '#fffadc'),
+                legend.key = ggplot2::element_rect(fill = '#fffadc'),
+                legend.background = ggplot2::element_rect(fill = '#fffadc')) +
+          labs(title = 'Bee colony stressors', x = 'Time period', y = 'Impacted colonies(%)')
+   
+        
+      ggplotly(plot_stressor, tooltip = c("y", "fill")) %>%
+      layout(plot_bgcolor = '#fffadc')
+}
 )
 
 app$callback(
