@@ -13,6 +13,7 @@ library(lubridate)
 # Read in global data
 colony <-  readr::read_csv("data/colony.csv")
 stressor <- readr::read_csv("data/stressor.csv")
+state_info <- readr::read_csv("data/state_info.csv")
 
 # Wrangle data
 colony <- colony %>%
@@ -22,7 +23,7 @@ colony <- colony %>%
     time = lubridate::ym(paste(year, start_month)),
     period = lubridate::quarter(time, type = "year.quarter")
   ) %>% 
-  dplyr::select(state, colony_n, time, period) %>%
+  dplyr::select(state, colony_n, colony_lost_pct, time, period) %>%
   dplyr::distinct(state, period, .keep_all = TRUE)
 
 stressor <- stressor %>%
@@ -352,8 +353,8 @@ app$callback(
   list(input('map_widget', 'value')),
   function(str_period, month) {
     df <- colony %>%
-      filter(period == str_period)
-    target_df <- left_join(state_info, df, by='state')
+      dplyr::filter(period == str_period)
+    target_df <- dplyr::left_join(state_info, df, by='state')
     target_df['colony_lost_pct'][is.na(target_df['colony_lost_pct'])] <- 0
     
     g <- list(
@@ -372,6 +373,7 @@ app$callback(
                 locations = ~abbr, text = ~colony_lost_pct,
                 mode = "text",
                 textfont = list(color = rgb(0,0,0), size = 12))
+
   }
 )
 
