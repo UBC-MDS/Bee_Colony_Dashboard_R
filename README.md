@@ -6,15 +6,19 @@
 
 ## Welcome
 
-Thank you for showing interest in the Bee Colony Dashboard! To view the dashboard please click [here](https://bee-colony-dashboard.herokuapp.com).
+Thank you for showing interest in the Bee Colony Dashboard! To view the dashboard please click [here](https://bee-colony-dashboard-r.herokuapp.com/).
 
 This README was created to provide you with more information about this project. Use the links below to jump to a section or scroll down.
 
-* [What are we doing?](#overview)
-* [Who are we?](#who-are-we)
-* [Get involved](#get-involved)
-* [Sketch](#sketch)
-* [License](#license)
+- [🐝 Bee Colony Dashboard](#-bee-colony-dashboard)
+  - [Welcome](#welcome)
+  - [What are we doing?](#what-are-we-doing)
+    - [The problem](#the-problem)
+    - [The solution](#the-solution)
+  - [Who are we?](#who-are-we)
+  - [Get involved](#get-involved)
+  - [Sketch](#sketch)
+  - [License](#license)
 
 ## What are we doing?
 
@@ -32,13 +36,15 @@ In the stacked bar chart, the percentage of colonies being affected by different
 
 In the geographic map of the United States of America, the user is be able to adjust the time period (measured by quarters of a year) that they are looking at by using a dropdown menu. By hovering over a state, the user can obtain the maximum number of colonies for that time period, as well as the colony loss percentage, measured as the number of lost colonies divided by the maximum number of colonies in that time period.
 
+Please refer to our [proposal](https://github.com/UBC-MDS/Bee_Colony_Dashboard/blob/main/docs/proposal.md) for more information.
+
 ## Who are we?
 
 The founders of the Bee Colony Dashboard, [Daniel King](https://github.com/danfke), [Manju Neervaram Abhinandana Kumar](https://github.com/manju-abhinandana), [Qingqing Song](https://github.com/scarlqq), and [Tianwei Wang](https://github.com/Davidwang11), are Masters of Data Science students at the University of British Columbia.
 
 ## Get involved
 
-If you find a bug or have thought of a way in which our project can improve please refer to our [contributing guidelines](https://github.com/UBC-MDS/Bee_Colony_Dashboard/blob/main/CONTRIBUTING.md). We welcome and recognize all contributions! In addition, if you join us in this project we ask that you follow our [code of conduct](https://github.com/UBC-MDS/Bee_Colony_Dashboard/blob/readme/CONDUCT.md).
+If you find a bug or have thought of a way in which our project can improve please refer to our [contributing guidelines](https://github.com/UBC-MDS/Bee_Colony_Dashboard_R/blob/main/CONTRIBUTING.md). We welcome and recognize all contributions! In addition, if you join us in this project we ask that you follow our [code of conduct](https://github.com/UBC-MDS/Bee_Colony_Dashboard_R/blob/main/CONDUCT.md).
 
 ## Sketch
 
@@ -47,7 +53,7 @@ The following sketch is what we originally envisioned our dashboard looking like
 
 ## License
 
-`Bee_Colony_Dashboard` was created by Daniel King, Manju Neervaram Abhinandana Kumar, Qingqing Song, and Tianwei Wang. It is licensed under the terms of the MIT license.
+`Bee_Colony_Dashboard_R` was created by Daniel King, Manju Neervaram Abhinandana Kumar, Qingqing Song, and Tianwei Wang. It is licensed under the terms of the MIT license.
 
 ## Thank you
 
