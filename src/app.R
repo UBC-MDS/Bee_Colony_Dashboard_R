@@ -86,9 +86,9 @@ app$layout(
                         ),
                         dbcRow(
                             dccDropdown(
-                                id='state-widget',
-                                value='Alabama',
+                                id = "state-widget",
                                 options = unique(colony$state),
+                                value = "Alabama",
                                 className = 'text-dark',
                                 style=list(
                                     "height"= "50px",
@@ -296,7 +296,7 @@ app$callback(
                 plot.background = ggplot2::element_rect(fill = '#fffadc'),
                 legend.key = ggplot2::element_rect(fill = '#fffadc'),
                 legend.background = ggplot2::element_rect(fill = '#fffadc')) +
-          ggplot2::labs(title = 'Bee colony stressors', x = 'Time period', y = 'Impacted colonies(%)')
+          ggplot2::labs(x = 'Time period', y = 'Impacted colonies(%)')
    
         
       ggplotly(plot_stressor, tooltip = c("y", "fill")) %>%
