@@ -32,6 +32,8 @@ stressor <- stressor %>%
          period = lubridate::quarter(time, type = "year.quarter")) %>% 
   dplyr::select(state, stressor,stress_pct, time, period)
 
+state = unique(colony$state)
+
 
 app <- Dash$new(external_stylesheets = dbcThemes$BOOTSTRAP)
 
@@ -87,7 +89,7 @@ app$layout(
                         dbcRow(
                             dccDropdown(
                                 id = "state-widget",
-                                options = unique(colony$state),
+                                options = state,
                                 value = "Alabama",
                                 className = 'text-dark',
                                 style=list(
