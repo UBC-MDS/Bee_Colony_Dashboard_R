@@ -88,7 +88,10 @@ app$layout(
                             dccDropdown(
                                 id='state-widget',
                                 value='Alabama',
-                                options = unique(colony$state),
+                                options = colony$state %>%
+                                            unique() %>%
+                                            purrr::map(function(p)
+                                                list(label = p, value = p)),
                                 className = 'text-dark',
                                 style=list(
                                     "height"= "50px",
