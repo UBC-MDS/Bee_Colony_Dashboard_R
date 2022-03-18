@@ -32,9 +32,6 @@ stressor <- stressor %>%
          period = lubridate::quarter(time, type = "year.quarter")) %>% 
   dplyr::select(state, stressor,stress_pct, time, period)
 
-state = colony$period %>%
-  unique()
-
 
 app <- Dash$new(external_stylesheets = dbcThemes$BOOTSTRAP)
 
@@ -89,9 +86,9 @@ app$layout(
                         ),
                         dbcRow(
                             dccDropdown(
-                                id = "state-widget",
-                                options = state,
-                                value = "Alabama",
+                                id='state-widget',
+                                value='Alabama',
+                                options = unique(colony$state),
                                 className = 'text-dark',
                                 style=list(
                                     "height"= "50px",
@@ -299,7 +296,7 @@ app$callback(
                 plot.background = ggplot2::element_rect(fill = '#fffadc'),
                 legend.key = ggplot2::element_rect(fill = '#fffadc'),
                 legend.background = ggplot2::element_rect(fill = '#fffadc')) +
-          ggplot2::labs(x = 'Time period', y = 'Impacted colonies(%)')
+          ggplot2::labs(title = 'Bee colony stressors', x = 'Time period', y = 'Impacted colonies(%)')
    
         
       ggplotly(plot_stressor, tooltip = c("y", "fill")) %>%
@@ -363,23 +360,19 @@ app$callback(
     g <- list(
       scope = 'usa',
       projection = list(type = 'albers usa'),
-      lakecolor = toRGB('white'),
-      bgcolor = '#fffadc'
+      lakecolor = toRGB('white')
     )
 
     plot_ly(target_df) %>%
-      layout(geo = g, paper_bgcolor = '#fffadc', 
-            title=paste("Time Period:", stringr::str_replace(as.character(str_period), stringr::fixed("."), "Q"))) %>%
+      layout(geo = g) %>%
       add_trace(type = "choropleth", locationmode = 'USA-states',
                 locations = ~abbr,
                 z = ~colony_lost_pct,
-                color = ~colony_lost_pct, autocolorscale = TRUE
-                ) %>%
+                color = ~colony_lost_pct, autocolorscale = TRUE) %>%
       add_trace(type = "scattergeo", locationmode = 'USA-states',
                 locations = ~abbr, text = ~colony_lost_pct,
                 mode = "text",
-                textfont = list(color = rgb(0,0,0), size = 12)) %>%
-      colorbar(title = "Loss(%)")
+                textfont = list(color = rgb(0,0,0), size = 12))
   }
 )
 
