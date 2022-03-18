@@ -353,8 +353,8 @@ app$callback(
   list(input('map_widget', 'value')),
   function(str_period, month) {
     df <- colony %>%
-      dplyr::filter(period == str_period)
-    target_df <- dplyr::left_join(state_info, df, by='state')
+      filter(period == str_period)
+    target_df <- left_join(state_info, df, by='state')
     target_df['colony_lost_pct'][is.na(target_df['colony_lost_pct'])] <- 0
     
     g <- list(
@@ -373,7 +373,6 @@ app$callback(
                 locations = ~abbr, text = ~colony_lost_pct,
                 mode = "text",
                 textfont = list(color = rgb(0,0,0), size = 12))
-
   }
 )
 
