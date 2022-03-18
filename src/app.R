@@ -360,19 +360,23 @@ app$callback(
     g <- list(
       scope = 'usa',
       projection = list(type = 'albers usa'),
-      lakecolor = toRGB('white')
+      lakecolor = toRGB('white'),
+      bgcolor = '#fffadc'
     )
 
     plot_ly(target_df) %>%
-      layout(geo = g) %>%
+      layout(geo = g, paper_bgcolor = '#fffadc', 
+            title=paste("Time Period:", stringr::str_replace(as.character(str_period), stringr::fixed("."), "Q"))) %>%
       add_trace(type = "choropleth", locationmode = 'USA-states',
                 locations = ~abbr,
                 z = ~colony_lost_pct,
-                color = ~colony_lost_pct, autocolorscale = TRUE) %>%
+                color = ~colony_lost_pct, autocolorscale = TRUE
+                ) %>%
       add_trace(type = "scattergeo", locationmode = 'USA-states',
                 locations = ~abbr, text = ~colony_lost_pct,
                 mode = "text",
-                textfont = list(color = rgb(0,0,0), size = 12))
+                textfont = list(color = rgb(0,0,0), size = 12)) %>%
+      colorbar(title = "Loss(%)")
   }
 )
 
