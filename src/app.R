@@ -32,7 +32,8 @@ stressor <- stressor %>%
          period = lubridate::quarter(time, type = "year.quarter")) %>% 
   dplyr::select(state, stressor,stress_pct, time, period)
 
-state = unique(colony$state)
+state = colony$period %>%
+  unique()
 
 
 app <- Dash$new(external_stylesheets = dbcThemes$BOOTSTRAP)
