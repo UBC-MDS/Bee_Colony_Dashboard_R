@@ -88,7 +88,8 @@ app$layout(
                             dccDropdown(
                                 id='state-widget',
                                 value='Alabama',
-                                options = unique(colony$state),
+                                options = colony$state %>%
+                                            unique(),
                                 className = 'text-dark',
                                 style=list(
                                     "height"= "50px",
