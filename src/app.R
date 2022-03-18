@@ -89,7 +89,9 @@ app$layout(
                                 id='state-widget',
                                 value='Alabama',
                                 options = colony$state %>%
-                                            unique(),
+                                            unique() %>%
+                                            purrr::map(function(p)
+                                                list(label = p, value = p)),
                                 className = 'text-dark',
                                 style=list(
                                     "height"= "50px",
