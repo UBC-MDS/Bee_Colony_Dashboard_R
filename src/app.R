@@ -277,34 +277,46 @@ app$layout(
 )
 
 app$callback(
-    output('stressor_chart', 'figure'),
-    list(
-      input('state-widget', 'value'),
-      input('start-date-widget', 'value'),
-      input('end-date-widget', 'value') 
-      ),
-    plot_stressor_chart <- function(state_arg, start_date, end_date) {
+  output('stressor_chart', 'figure'),
+  list(
+    input('state-widget', 'value'),
+    input('start-date-widget', 'value'),
+    input('end-date-widget', 'value')
+  ),
+  plot_stressor_chart <-
+    function(state_arg, start_date, end_date) {
       start_date <- lubridate::ym(start_date)
       end_date <- lubridate::ym(end_date)
       
-      data <- stressor %>%  filter(state == state_arg, 
-                                   lubridate::ym(period) %within% lubridate::interval(start = start_date,
-                                                                                      end = end_date))
+      data <- stressor %>%  filter(
+        state == state_arg,
+        lubridate::ym(period) %within% lubridate::interval(start = start_date,
+                                                           end = end_date)
+      )
       
-      plot_stressor <- data %>% ggplot2::ggplot(aes(x = stringr::str_replace(as.character(period), stringr::fixed("."), "Q"),
-                            y = stress_pct,
-                            fill = stressor)) +
-          ggplot2::geom_bar(position="stack", stat="identity") + 
-          ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45),
-                plot.background = ggplot2::element_rect(fill = '#fffadc'),
-                legend.key = ggplot2::element_rect(fill = '#fffadc'),
-                legend.background = ggplot2::element_rect(fill = '#fffadc')) +
-          ggplot2::labs(title = 'Bee colony stressors', x = 'Time period', y = 'Impacted colonies(%)')
-   
-        
+      plot_stressor <-
+        data %>% ggplot2::ggplot(aes(
+          x = stringr::str_replace(as.character(period), stringr::fixed("."), "Q"),
+          y = stress_pct,
+          fill = stressor
+        )) +
+        ggplot2::geom_bar(position = "stack", stat = "identity") +
+        ggplot2::theme(
+          axis.text.x = ggplot2::element_text(angle = 45),
+          plot.background = ggplot2::element_rect(fill = '#fffadc'),
+          legend.key = ggplot2::element_rect(fill = '#fffadc'),
+          legend.background = ggplot2::element_rect(fill = '#fffadc')
+        ) +
+        ggplot2::labs(
+          x = 'Time period',
+          y = 'Impacted colonies(%)',
+          fill = "Stressors"
+        )
+      
+      
       ggplotly(plot_stressor, tooltip = c("y", "fill")) %>%
-      layout(plot_bgcolor = '#fffadc')
-}
+        layout(plot_bgcolor = '#fffadc')
+    }
 )
 
 app$callback(
@@ -343,7 +355,6 @@ app$callback(
       ggplot2::scale_x_date(date_labels = "%b %Y")
     
     time_series
-    # , width = 700, height = 400
     
     ggplotly(time_series + aes(text = colony_n), tooltip = "text") %>%
       layout(plot_bgcolor = '#fffadc')
@@ -367,18 +378,33 @@ app$callback(
       bgcolor = '#fffadc'
     )
 
-    plot_ly(target_df) %>%
-      layout(geo = g, paper_bgcolor = '#fffadc', 
-            title=paste("Time Period:", stringr::str_replace(as.character(str_period), stringr::fixed("."), "Q"))) %>%
-      add_trace(type = "choropleth", locationmode = 'USA-states',
-                locations = ~abbr,
-                z = ~colony_lost_pct,
-                color = ~colony_lost_pct, autocolorscale = TRUE
-                ) %>%
-      add_trace(type = "scattergeo", locationmode = 'USA-states',
-                locations = ~abbr, text = ~colony_lost_pct,
-                mode = "text",
-                textfont = list(color = rgb(0,0,0), size = 12)) %>%
+    plot_ly(
+      target_df
+    ) %>%
+      layout(
+        geo = g,
+        paper_bgcolor = '#fffadc',
+        title = paste(
+          "Time Period:",
+          stringr::str_replace(as.character(str_period), stringr::fixed("."), "Q")
+        )
+      ) %>%
+      add_trace(
+        type = "choropleth",
+        locationmode = 'USA-states',
+        locations = ~ abbr,
+        z = ~ colony_lost_pct,
+        color = ~ colony_lost_pct,
+        autocolorscale = TRUE
+      ) %>%
+      add_trace(
+        type = "scattergeo",
+        locationmode = 'USA-states',
+        locations = ~ abbr,
+        text = ~ colony_lost_pct,
+        mode = "text",
+        textfont = list(color = rgb(0, 0, 0), size = 12)
+      ) %>%
       colorbar(title = "Loss(%)")
   }
 )
