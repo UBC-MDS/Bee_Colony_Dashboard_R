@@ -42,6 +42,7 @@ app$layout(
             list(
                 dbcCol(
                     list(
+                      # App title
                         htmlH1(
                             "Bee Colony Dashboard",
                             style=list(
@@ -53,6 +54,7 @@ app$layout(
                                 "border-radius"= "5px"
                             )
                         ),
+                        # Map period dropdown menu
                         htmlH4(
                             "Select the period for map...",
                             style=list("font-family"= "Roboto", "font-weight"= "600")
@@ -79,6 +81,7 @@ app$layout(
                                 placeholder="Select a period"
                             )
                         ),
+                        # State selection for time-series and stressor chart dropdown menu
                         htmlBr(),
                         htmlH4(
                             "Select a state for trend and stressor...",
@@ -105,6 +108,7 @@ app$layout(
                             )
                         ),
                         htmlBr(),
+                        # Start and end date dropdown menus for time-series and stressor chart
                         htmlH4(
                             "Select the period for trend and stressor...", 
                             style=list("font-family"= "Roboto", "font-weight"= "600"),
@@ -164,6 +168,7 @@ app$layout(
                     md=6,
                     align="start",
                 ),
+                # Map
                 htmlBr(),
                 dbcCol(
                     dbcCard(
@@ -204,6 +209,7 @@ app$layout(
                     (
                         dbcCard(
                             list(
+                              # Time-series
                                 dbcCardHeader(
                                     htmlH4(
                                         "Number of bee colonies over time",
@@ -236,7 +242,7 @@ app$layout(
                         dbcCard(
                             list(
                                 dbcCardHeader(
-                                    
+                                    # Stressor chart
                                         htmlH4(
                                             "Bee colony stressors",
                                             style=list(
@@ -276,6 +282,8 @@ app$layout(
   )
 )
 
+
+# Stressor bar chart
 app$callback(
   output('stressor_chart', 'figure'),
   list(
@@ -319,6 +327,7 @@ app$callback(
     }
 )
 
+# Number of colonies time-series
 app$callback(
   output("ncolony_chart", "figure"),
   list(
@@ -362,6 +371,8 @@ app$callback(
   }
 )
 
+
+# Map of loss percentages
 app$callback(
   output('map', 'figure'),
   list(input('map_widget', 'value')),
