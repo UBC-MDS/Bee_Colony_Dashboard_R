@@ -2,7 +2,7 @@
 
 ***Providing apiarists with valuable insights into bee colony health***
 
-![dashboard-gif](docs/dash.gif)
+![dashboard-gif](docs/dashr.gif)
 
 ## Welcome
 
@@ -19,6 +19,9 @@ This README was created to provide you with more information about this project.
   - [Get involved](#get-involved)
   - [Sketch](#sketch)
   - [License](#license)
+  - [License](#license-1)
+  - [Run the app locally](#run-the-app-locally)
+  - [Thank you](#thank-you)
 
 ## What are we doing?
 
@@ -54,6 +57,23 @@ The following sketch is what we originally envisioned our dashboard looking like
 ## License
 
 `Bee_Colony_Dashboard_R` was created by Daniel King, Manju Neervaram Abhinandana Kumar, Qingqing Song, and Tianwei Wang. It is licensed under the terms of the MIT license.
+
+## License
+
+`Bee_Colony_Dashboard` was created by Daniel King, Manju Neervaram Abhinandana Kumar, Qingqing Song, and Tianwei Wang. It is licensed under the terms of the MIT license.
+
+## Run the app locally
+
+If you cannot open the app online for some reason, you can also run our app using Docker by running the following commands from the command line after cloning the repo:
+
+```bash
+cd Bee_Colony_Dashboard_R
+docker-compose up
+```
+
+Finally, open the app in the following URL: <http://localhost:8050/>
+
+Note that it may take about 10 minutes to build the app locally.
 
 ## Thank you
 
