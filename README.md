@@ -18,7 +18,6 @@ This README was created to provide you with more information about this project.
   - [Who are we?](#who-are-we)
   - [Get involved](#get-involved)
   - [License](#license)
-  - [License](#license-1)
   - [Run the app locally](#run-the-app-locally)
   - [Thank you](#thank-you)
 
@@ -51,10 +50,6 @@ If you find a bug or have thought of a way in which our project can improve plea
 ## License
 
 `Bee_Colony_Dashboard_R` was created by Daniel King, Manju Neervaram Abhinandana Kumar, Qingqing Song, and Tianwei Wang. It is licensed under the terms of the MIT license.
-
-## License
-
-`Bee_Colony_Dashboard` was created by Daniel King, Manju Neervaram Abhinandana Kumar, Qingqing Song, and Tianwei Wang. It is licensed under the terms of the MIT license.
 
 ## Run the app locally
 
