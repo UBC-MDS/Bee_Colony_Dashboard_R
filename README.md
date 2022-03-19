@@ -72,6 +72,7 @@ docker-compose up
 ```
 
 Finally, open the app in the following URL: <http://localhost:8050/>
+
 Note that it may take about 10 minutes to build the app locally.
 
 ## Thank you
